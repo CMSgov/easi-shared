@@ -13,5 +13,5 @@ concurrency:
 jobs:
   Run_Tests:
     uses: ./.github/workflows/run_tests.yml
-  Lint:
+  Pre_Commit:
     uses: ./.github/workflows/pre_commit.yml
