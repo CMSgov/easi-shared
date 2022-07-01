@@ -17,4 +17,4 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
       - name: Run go tests
-        run: go test ./go/...
+        run: scripts/test-go.sh
