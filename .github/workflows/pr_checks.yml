@@ -1,3 +1,5 @@
+name: PR Checks
+
 on:
   pull_request:
     branches:
@@ -12,4 +14,4 @@ jobs:
   Run_Tests:
     uses: ./.github/workflows/run_tests.yml
   Lint:
-    uses: ./.github/workflows/lint.yml
+    uses: ./.github/workflows/pre_commit.yml

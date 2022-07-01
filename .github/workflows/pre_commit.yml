@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run pre-commit hooks
 
 on:
   workflow_call:
