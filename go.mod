@@ -1,4 +1,4 @@
-module github.com/CMSgov/easi-shared
+module github.com/cmsgov/easi-shared
 
 go 1.18
 
