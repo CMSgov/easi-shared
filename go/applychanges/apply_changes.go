@@ -44,11 +44,22 @@ func ApplyChanges(changes map[string]interface{}, to interface{}) error {
 	sanitizeChanges(changes)
 
 	// Set up the decoder. This is almost exactly ripped from https://gqlgen.com/reference/changesets/
-	dec, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+	dec, err := getDefaultDecoder(to)
+
+	if err != nil {
+		return err
+	}
+
+	return dec.Decode(changes)
+}
+
+func getDefaultDecoder(to interface{}) (*mapstructure.Decoder, error) {
+	return mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		ErrorUnused: true,
 		TagName:     "json",
 		Result:      to,
 		ZeroFields:  true,
+		Squash:      true,
 		// This is needed to get mapstructure to call the gqlgen unmarshaler func for custom scalars (eg Date)
 		DecodeHook: func(a reflect.Type, b reflect.Type, v interface{}) (interface{}, error) {
 			// If the destination is a time.Time and we need to parse it from a string
@@ -68,10 +79,4 @@ func ApplyChanges(changes map[string]interface{}, to interface{}) error {
 			return v, nil
 		},
 	})
-
-	if err != nil {
-		return err
-	}
-
-	return dec.Decode(changes)
 }

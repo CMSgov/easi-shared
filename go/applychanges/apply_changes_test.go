@@ -135,3 +135,43 @@ func TestApplyChangesUUID(t *testing.T) {
 	assert.Equal(t, "02a9920e-b015-4de3-8e32-fb965ac4653c", clay.ID.String())
 	assert.Equal(t, "Clay", clay.Name)
 }
+
+type EmbedStruct struct {
+	ID uuid.UUID `json:"id"`
+}
+type Embedder struct {
+	EmbedStruct
+	Name string `json:"name"`
+}
+type UltimateEmbedder struct {
+	Embedder
+	PowerLevel int `json:"powerLevel"`
+}
+
+func TestApplyChangesOnEmbeddedStructs(t *testing.T) {
+	champion := UltimateEmbedder{
+		PowerLevel: 7900,
+		Embedder: Embedder{
+			Name: "Vegeta",
+			EmbedStruct: EmbedStruct{
+				ID: uuid.Nil,
+			},
+		},
+	}
+
+	happyChanges := map[string]interface{}{
+		"id":         []byte{0x2, 0xa9, 0x92, 0xe, 0xb0, 0x15, 0x4d, 0xe3, 0x8e, 0x32, 0xfb, 0x96, 0x5a, 0xc4, 0x65, 0x3c},
+		"powerLevel": 9001,
+		"name":       "Goku",
+	}
+
+	err := ApplyChanges(happyChanges, &champion)
+	if err != nil {
+		t.Errorf("ApplyChanges failed: %s", err)
+	}
+	assert.Equal(t, "02a9920e-b015-4de3-8e32-fb965ac4653c", champion.ID.String())
+	assert.Equal(t, "Goku", champion.Name)
+	assert.Equal(t, 9001, champion.PowerLevel)
+	assert.Greater(t, champion.PowerLevel, 9000)
+
+}
