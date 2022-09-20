@@ -22,7 +22,7 @@ func TestApplyChanges(t *testing.T) {
 		"age": 28,
 	}
 	err := ApplyChanges(clayChanges, &clay)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
 	assert.Equal(t, "Clay", clay.Name)
 	assert.Equal(t, 28, clay.Age)
 	assert.Equal(t, []string{"Clayboy", "Claysadilla"}, clay.Nicknames)
@@ -31,7 +31,7 @@ func TestApplyChanges(t *testing.T) {
 		"nicknames": []string{},
 	}
 	err = ApplyChanges(clayChanges, &clay)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
 	assert.Equal(t, "Clay", clay.Name)
 	assert.Equal(t, 28, clay.Age)
 	assert.Equal(t, []string{}, clay.Nicknames)
@@ -41,7 +41,7 @@ func TestApplyChanges(t *testing.T) {
 		"age":       50,
 	}
 	err = ApplyChanges(clayChanges, &clay)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
 	assert.Equal(t, "Clay", clay.Name)
 	assert.Equal(t, 50, clay.Age)
 	assert.Equal(t, []string{"Clayson the Wise"}, clay.Nicknames)
@@ -60,7 +60,7 @@ func TestApplyChangesEmptyString(t *testing.T) {
 		"parent": "",
 	}
 	err := ApplyChanges(sonChanges, &son)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
 	assert.Equal(t, "Son", son.Name)
 	assert.Nil(t, son.Parent) // should set to nil
 }
@@ -83,7 +83,7 @@ func TestApplyChangesWithTime(t *testing.T) {
 		"whenEnded":   "2022-05-08T21:00:00Z",                       // and should work with strings in time.RFC3339Nano format
 	}
 	err := ApplyChanges(fdChanges, &fd)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
 	assert.Equal(t, time.Date(2022, 5, 8, 18, 0, 0, 0, time.UTC), fd.WhenStarted)
 	assert.Equal(t, time.Date(2022, 5, 8, 21, 0, 0, 0, time.UTC), fd.WhenEnded)
 	assert.Equal(t, false, fd.DidHaveFun)
@@ -92,7 +92,7 @@ func TestApplyChangesWithTime(t *testing.T) {
 		"didHaveFun": true,
 	}
 	err = ApplyChanges(fdChanges, &fd)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
 	assert.Equal(t, time.Date(2022, 5, 8, 18, 0, 0, 0, time.UTC), fd.WhenStarted)
 	assert.Equal(t, time.Date(2022, 5, 8, 21, 0, 0, 0, time.UTC), fd.WhenEnded)
 	assert.Equal(t, true, fd.DidHaveFun)
@@ -117,8 +117,8 @@ func TestApplyChangesUUID(t *testing.T) {
 		"id": newIDBytes,
 	}
 	err = ApplyChanges(clayChanges, &clay)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
+	assert.NoError(t, err, "ApplyChanges failed.")
 	assert.Equal(t, newID, clay.ID.String())
 	assert.Equal(t, "Clay", clay.Name)
 }
@@ -154,7 +154,7 @@ func TestApplyChangesOnEmbeddedStructs(t *testing.T) {
 	}
 
 	err := ApplyChanges(happyChanges, &champion)
-	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoError(t, err, "ApplyChanges failed.")
 
 	assert.Equal(t, newID, champion.ID.String())
 	assert.Equal(t, "Goku", champion.Name)
