@@ -22,9 +22,7 @@ func TestApplyChanges(t *testing.T) {
 		"age": 28,
 	}
 	err := ApplyChanges(clayChanges, &clay)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
 	assert.Equal(t, "Clay", clay.Name)
 	assert.Equal(t, 28, clay.Age)
 	assert.Equal(t, []string{"Clayboy", "Claysadilla"}, clay.Nicknames)
@@ -33,9 +31,7 @@ func TestApplyChanges(t *testing.T) {
 		"nicknames": []string{},
 	}
 	err = ApplyChanges(clayChanges, &clay)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
 	assert.Equal(t, "Clay", clay.Name)
 	assert.Equal(t, 28, clay.Age)
 	assert.Equal(t, []string{}, clay.Nicknames)
@@ -45,9 +41,7 @@ func TestApplyChanges(t *testing.T) {
 		"age":       50,
 	}
 	err = ApplyChanges(clayChanges, &clay)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
 	assert.Equal(t, "Clay", clay.Name)
 	assert.Equal(t, 50, clay.Age)
 	assert.Equal(t, []string{"Clayson the Wise"}, clay.Nicknames)
@@ -66,9 +60,7 @@ func TestApplyChangesEmptyString(t *testing.T) {
 		"parent": "",
 	}
 	err := ApplyChanges(sonChanges, &son)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
 	assert.Equal(t, "Son", son.Name)
 	assert.Nil(t, son.Parent) // should set to nil
 }
@@ -91,9 +83,7 @@ func TestApplyChangesWithTime(t *testing.T) {
 		"whenEnded":   "2022-05-08T21:00:00Z",                       // and should work with strings in time.RFC3339Nano format
 	}
 	err := ApplyChanges(fdChanges, &fd)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
 	assert.Equal(t, time.Date(2022, 5, 8, 18, 0, 0, 0, time.UTC), fd.WhenStarted)
 	assert.Equal(t, time.Date(2022, 5, 8, 21, 0, 0, 0, time.UTC), fd.WhenEnded)
 	assert.Equal(t, false, fd.DidHaveFun)
@@ -102,9 +92,7 @@ func TestApplyChangesWithTime(t *testing.T) {
 		"didHaveFun": true,
 	}
 	err = ApplyChanges(fdChanges, &fd)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
 	assert.Equal(t, time.Date(2022, 5, 8, 18, 0, 0, 0, time.UTC), fd.WhenStarted)
 	assert.Equal(t, time.Date(2022, 5, 8, 21, 0, 0, 0, time.UTC), fd.WhenEnded)
 	assert.Equal(t, true, fd.DidHaveFun)
@@ -121,18 +109,17 @@ type PersonWithUUID struct {
 func TestApplyChangesUUID(t *testing.T) {
 	clay := PersonWithUUID{uuid.MustParse("cfe0965f-aa95-4ade-af54-838a85cc6644"), "Clay"}
 
-	// decodeData, decodeErr := hex.DecodeString("02a9920eb0154de38e32fb965ac4653c")
-	// if decodeErr != nil {
-	// 	t.Errorf("Failed to decode UUID: %s", decodeErr)
-	// }
+	newID := "02a9920e-b015-4de3-8e32-fb965ac4653c"
+	newIDBytes, err := uuid.MustParse(newID).MarshalBinary()
+	assert.NoError(t, err)
+
 	clayChanges := map[string]interface{}{
-		"id": []byte{0x2, 0xa9, 0x92, 0xe, 0xb0, 0x15, 0x4d, 0xe3, 0x8e, 0x32, 0xfb, 0x96, 0x5a, 0xc4, 0x65, 0x3c},
+		"id": newIDBytes,
 	}
-	err := ApplyChanges(clayChanges, &clay)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
-	assert.Equal(t, "02a9920e-b015-4de3-8e32-fb965ac4653c", clay.ID.String())
+	err = ApplyChanges(clayChanges, &clay)
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+	assert.Equal(t, newID, clay.ID.String())
 	assert.Equal(t, "Clay", clay.Name)
 }
 
@@ -158,18 +145,18 @@ func TestApplyChangesOnEmbeddedStructs(t *testing.T) {
 			},
 		},
 	}
+	newID := "02a9920e-b015-4de3-8e32-fb965ac4653c"
 
 	happyChanges := map[string]interface{}{
-		"id":         []byte{0x2, 0xa9, 0x92, 0xe, 0xb0, 0x15, 0x4d, 0xe3, 0x8e, 0x32, 0xfb, 0x96, 0x5a, 0xc4, 0x65, 0x3c},
+		"id":         uuid.MustParse(newID),
 		"powerLevel": 9001,
 		"name":       "Goku",
 	}
 
 	err := ApplyChanges(happyChanges, &champion)
-	if err != nil {
-		t.Errorf("ApplyChanges failed: %s", err)
-	}
-	assert.Equal(t, "02a9920e-b015-4de3-8e32-fb965ac4653c", champion.ID.String())
+	assert.NoErrorf(t, err, "ApplyChanges failed: %s")
+
+	assert.Equal(t, newID, champion.ID.String())
 	assert.Equal(t, "Goku", champion.Name)
 	assert.Equal(t, 9001, champion.PowerLevel)
 	assert.Greater(t, champion.PowerLevel, 9000)
