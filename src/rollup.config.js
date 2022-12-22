@@ -25,7 +25,7 @@ export default [
       scss({
         verbose: true,
         failOnError: true
-      }), // will output compiled styles to "bundle.css"
+      }),
       resolve(),
       commonjs(),
       typescript({ tsconfig: "./tsconfig.json" }),
