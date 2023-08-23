@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+      - name: Set up go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: './go.mod'
+          cache: true
       - name: Pre-commit checks
         uses: pre-commit/action@v3.0.0
         with:
