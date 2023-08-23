@@ -1,4 +1,4 @@
-package stmtcache
+package namedstatements
 
 import (
 	"errors"
