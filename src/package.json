@@ -22,13 +22,19 @@
 		"url": "https://github.com/CMSgov/easi-shared/issues"
 	},
 	"homepage": "https://github.com/CMSgov/easi-shared#readme",
-	"dependencies": {},
+	"dependencies": {
+		"@trussworks/react-uswds": "^2.8.0",
+		"classnames": "^2.3.2",
+		"postcss": "^8.4.31",
+		"rollup-plugin-postcss": "^4.0.2",
+		"sass": "^1.69.5"
+	},
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^22.0.2",
 		"@rollup/plugin-node-resolve": "^14.1.0",
 		"@rollup/plugin-typescript": "^8.5.0",
 		"@types/react": "^18.0.21",
-		"react": "^18.2.0",
+		"react": "^17.0.2",
 		"rollup": "^2.79.1",
 		"rollup-plugin-dts": "^4.2.2",
 		"tslib": "^2.4.0",
